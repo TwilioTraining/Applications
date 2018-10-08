@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Client dialer</title>
+   <script type="text/javascript"
+src="//media.twiliocdn.com/sdk/js/client/v1.4/twilio.min.js"></script>
+ <script type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js">
+    </script>
+    <link href="//static0.twilio.com/resources/quickstart/client.css"
+      type="text/css" rel="stylesheet" />
+    <script type="text/javascript">
+  
+      Twilio.Device.setup("{{ token }}");
+  
+      Twilio.Device.ready(function (device) {
+        $("#log").text("Client '{{ client_name }}' is ready");
+      });
+  
+      Twilio.Device.error(function (error) {
+        $("#log").text("Error: " + error.message);
+      });
+  
+      Twilio.Device.connect(function (conn) {
+        $("#log").text("Successfully established call");
+      });
+  
+      Twilio.Device.disconnect(function (conn) {
+        $("#log").text("Call ended");
+      });
+  
+      Twilio.Device.incoming(function (conn) {
+        $("#log").text("Incoming connection from " + conn.parameters.From);
+        // accept the incoming connection and start two-way audio
+        conn.accept();
+      });
+  
+  
+      function call() {
+        // get the phone number or client to connect the call to
+        params = {"PhoneNumber": $("#number").val()};
+        Twilio.Device.connect(params);
+      }
+  
+      function hangup() {
+        Twilio.Device.disconnectAll();
+      }
+
+      function sendDigit(digit)
+      {
+        Twilio.Device.activeConnection().sendDigits(digit);
+      }
+
+
+    </script>
+     </head>
+  <body>
+    <button class="call" onclick="call();">
+      Call
+    </button>
+  
+    <button class="hangup" onclick="hangup();">
+      Hangup
+    </button>
+  
+    <input type="text" id="number" name="number"
+      placeholder="Enter a phone number or client to call"/>
+  
+    <div id="log">Loading pigeons...</div>
+  
+    <ul id="people"/>
+
+     <div className="keys">
+        <div className="key-row">
+          <button className="btn btn-circle btn-default" onclick="sendDigit('1');">1</button>
+          <button className="btn btn-circle btn-default" onclick="sendDigit('2');">2
+            <span>A B C</span>
+          </button>
+          <button className="btn btn-circle btn-default" onclick="sendDigit('3');">3
+            <span>D E F</span>
+          </button>
+        </div>
+        <div className="key-row">
+          <button className="btn btn-circle btn-default" onclick="sendDigit('4');">4
+            <span>G H I</span>
+          </button>
+          <button className="btn btn-circle btn-default" onclick="sendDigit('5');">5
+            <span>J K L</span>
+          </button>
+          <button className="btn btn-circle btn-default" onclick="sendDigit('6');">6
+            <span>M N O</span>
+          </button>
+        </div>
+        <div className="key-row">
+          <button className="btn btn-circle btn-default" onclick="sendDigit('7');">7
+            <span>P Q R S</span>
+          </button>
+          <button className="btn btn-circle btn-default" onclick="sendDigit('8');">8
+            <span>T U V</span>
+          </button>
+          <button className="btn btn-circle btn-default" onclick="sendDigit('9');">9
+            <span>W X Y Z</span>
+          </button>
+        </div>
+        <div className="key-row">
+          <button className="btn btn-circle btn-default" onclick="sendDigit('*');">*</button>
+          <button className="btn btn-circle btn-default" onclick="sendDigit('0');">0</button>
+          <button className="btn btn-circle btn-default" onclick="sendDigit('#');">#</button>
+        </div>
+      </div>
+  </body>
+</html>
